@@ -56,7 +56,10 @@ namespace Misc::StringUtils
 
     // Every toolchain the fork builds with reads floating point through `std::from_chars`, which is
     // what `__cpp_lib_to_chars` says of a library once the whole of `<charconv>` is there.
+    // (Apple's libc++ reads floats from macOS 26 on and states no `__cpp_lib_to_chars`: there the call below is the check.)
+#if !defined(_LIBCPP_VERSION) || defined(__cpp_lib_to_chars)
     static_assert(__cpp_lib_to_chars >= 201611L, "a standard library whose std::from_chars reads no floats");
+#endif
 
     /// The number `s` spells, or nothing where it spells none. A floating-point number is a finite
     /// one: `std::from_chars` reads `inf` and `nan` as numbers, and no text this reads — a setting,

@@ -10,11 +10,12 @@
 # The game's programs: the game, and what the launcher and the wizard start, the importer and the navmesh tool.
 set(game_programs
     openmw
-    openmw-launcher
-    openmw-wizard
     openmw-iniimporter
     openmw-navmeshtool
 )
+if(OPENMW_QT)
+    list(APPEND game_programs openmw-launcher openmw-wizard)
+endif()
 # The tools: console programs, none of them Qt's, which a plain archive holds. **OpenMW-CS is built and not shipped**:
 # upstream's editor, which draws through the rasterizer, and whose Qt needs the libraries only the AppImage carries.
 set(tools_programs

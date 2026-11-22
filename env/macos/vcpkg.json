@@ -1,0 +1,41 @@
+{
+  "dependencies": [
+    "boost-geometry",
+    "boost-iostreams",
+    "boost-program-options",
+    {
+      "name": "bullet3",
+      "features": [
+        "double-precision"
+      ]
+    },
+    {
+      "name": "ffmpeg",
+      "default-features": false,
+      "features": [
+        "avcodec",
+        "avformat",
+        "swresample",
+        "swscale"
+      ]
+    },
+    "freetype",
+    "icu",
+    "luajit",
+    "lz4",
+    "mygui",
+    "openal-soft",
+    "openmw-osg",
+    "shaderc",
+    "spirv-headers",
+    {
+      "name": "spirv-tools",
+      "features": [
+        "tools"
+      ]
+    },
+    "vulkan-headers",
+    "zlib",
+    "boost-filesystem"
+  ]
+}

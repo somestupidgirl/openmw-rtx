@@ -4,6 +4,7 @@
 # The tests and the benchmarks, CMake's own switch, which every preset leaves on: every program is built
 # in every flavour.
 option(BUILD_TESTING "The tests and the benchmarks" ON)
+option(OPENMW_QT "The Qt programs: the launcher, the wizard and the editor" ON)
 
 # **A sanitizer over the whole build**, the fetched projects included: ThreadSanitizer sees a lock only in code it
 # instrumented, so a library left out reports races on what it guards, and AddressSanitizer's reports carry the

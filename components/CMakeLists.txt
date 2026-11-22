@@ -1561,7 +1561,7 @@ target_sources(
 target_sources(openmw-components PRIVATE dlss/dlss.cpp PUBLIC FILE_SET HEADERS FILES dlss/dlss.hpp)
 if(WIN32)
     target_sources(openmw-components PRIVATE dlss/dlsswin32.cpp)
-elseif(LINUX)
+elseif(LINUX OR APPLE)   # (macOS: Linux's download, which NGX never asks for there)
     target_sources(openmw-components PRIVATE dlss/dlsslinux.cpp)
 else()
     message(
@@ -1574,7 +1574,7 @@ endif()
 # Where the system keeps a user's files and the game's install, which `files/fixedpath.hpp` asks of one system's file.
 if(WIN32)
     target_sources(openmw-components PRIVATE files/targetpathwin32.cpp)
-elseif(LINUX)
+elseif(LINUX OR APPLE)   # (macOS: the XDG folders under the home, as Linux's)
     target_sources(openmw-components PRIVATE files/targetpathlinux.cpp)
 else()
     message(FATAL_ERROR "${CMAKE_SYSTEM_NAME} needs a file of its own in components/files, as fixedpath.hpp asks")
@@ -1660,7 +1660,7 @@ target_link_libraries(openmw-components PUBLIC ${osg_plugin_targets})
 target_link_options(
     openmw-components
     INTERFACE
-        $<IF:$<CXX_COMPILER_ID:MSVC>,/INCLUDE:openmw_osg_plugins,LINKER:--undefined=openmw_osg_plugins>
+        $<IF:$<CXX_COMPILER_ID:MSVC>,/INCLUDE:openmw_osg_plugins,$<IF:$<PLATFORM_ID:Darwin>,LINKER:-u$<COMMA>_openmw_osg_plugins,LINKER:--undefined=openmw_osg_plugins>>
 )
 
 if(WIN32)
@@ -1673,6 +1673,7 @@ if(WIN32)
     )
 endif()
 
+if(OPENMW_QT)
 add_library(openmw-components-qt STATIC)
 target_sources(
     openmw-components-qt
@@ -1764,6 +1765,7 @@ target_sources(
                 graphite/style.hpp
 )
 target_link_libraries(openmw-graphite PUBLIC Qt::Widgets PRIVATE Qt::Svg)
+endif()
 
 add_subdirectory(rtx)
 

@@ -2,7 +2,9 @@ add_subdirectory(shaders)
 add_subdirectory(data)
 add_subdirectory(data-mw)
 add_subdirectory(lua_api)
-add_subdirectory(lang)
+if(OPENMW_QT)
+    add_subdirectory(lang)
+endif()
 
 # The settings' defaults, the configuration a build runs with, and what the programs read beside them,
 # into the build where the programs run from. The two defaults packed with base64 (`cmake/base64.cmake`), as the

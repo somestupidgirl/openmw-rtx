@@ -243,6 +243,7 @@ target_compile_definitions(
 )
 find_package(VulkanHeaders CONFIG REQUIRED)
 
+if(OPENMW_QT)
 find_package(
     Qt6
     REQUIRED
@@ -269,6 +270,7 @@ endfunction()
 # archive calls.
 if(NOT WIN32)
     openmw_import_archive(Unshield::Unshield NAMES unshield HEADER libunshield.h LINKS ZLIB::ZLIB)
+endif()
 endif()
 
 # FFmpeg through the set's own find module, which names every library its static ones link.
@@ -361,6 +363,17 @@ if(WIN32)
         INTERFACE
             OpenSceneGraph::osgText
             OpenSceneGraph::osgGA
+    )
+elseif(APPLE)
+    # (macOS: Cocoa's windows, not X11's)
+    target_link_libraries(
+        OpenSceneGraph::osgViewer
+        INTERFACE
+            OpenSceneGraph::osgText
+            OpenSceneGraph::osgGA
+            "-framework Cocoa"
+            "-framework IOKit"
+            "-framework CoreVideo"
     )
 else()
     find_package(X11 REQUIRED COMPONENTS Xinerama)

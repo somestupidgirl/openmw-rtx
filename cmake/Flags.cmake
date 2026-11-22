@@ -46,10 +46,16 @@ if(CMAKE_C_COMPILER_ID STREQUAL "MSVC" OR CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
         set(CMAKE_${kind}_LINKER_FLAGS_RELWITHDEBINFO_INIT "/INCREMENTAL:NO")
     endforeach()
 else()
-    include("${CMAKE_CURRENT_LIST_DIR}/../vcpkg/linux.cmake")
-    # `sqrt` and the like as one instruction rather than a call that sets `errno`, with the same result: the tree
-    # reads `errno` after system calls alone. The tree's, not the set's, whose code was not read for it.
-    set(openmw_flags_common "${openmw_codegen_gnu} ${openmw_codegen_linux} -fno-math-errno")
+    if(APPLE)
+        # macOS (AMDRadeonRDNA4's port): the system's libc++ and linker, none of Linux's GCC; the code generation the
+        # set's x86-64-v2 and no contraction, as Linux's, without Linux's hardening flags Apple's Clang driver lacks.
+        set(openmw_flags_common "-g1 -fno-omit-frame-pointer -march=x86-64-v2 -ffp-contract=off -fno-math-errno")
+    else()
+        include("${CMAKE_CURRENT_LIST_DIR}/../vcpkg/linux.cmake")
+        # `sqrt` and the like as one instruction rather than a call that sets `errno`, with the same result: the tree
+        # reads `errno` after system calls alone. The tree's, not the set's, whose code was not read for it.
+        set(openmw_flags_common "${openmw_codegen_gnu} ${openmw_codegen_linux} -fno-math-errno")
+    endif()
     # UndefinedBehaviorSanitizer beside AddressSanitizer, its first finding the end of the process however the
     # program was started, where `UBSAN_OPTIONS=halt_on_error=1` stops it only under the test presets.
     # glibc's checked calls off under either, which no sanitizer supports (the AddressSanitizer FAQ).

@@ -40,6 +40,19 @@ elseif(LINUX)
                 FILES
                     kernelfilelinux.hpp
     )
+elseif(APPLE)
+    # (macOS, AMDRadeonRDNA4's port: Linux's files where they are POSIX's or find no /proc and answer nothing)
+    target_sources(
+        openmw-platform-io
+        PRIVATE
+            kernelfilelinux.cpp
+            processmacos.cpp
+            wholefileposix.cpp
+        PUBLIC
+            FILE_SET HEADERS
+                FILES
+                    kernelfilelinux.hpp
+    )
 endif()
 
 target_sources(
@@ -100,6 +113,24 @@ elseif(LINUX)
             platformposix.cpp
             sharedmemoryposix.cpp
             threadlinux.cpp
+            userhomeposix.cpp
+    )
+elseif(APPLE)
+    target_sources(
+        openmw-components
+        PRIVATE
+            appendfileposix.cpp
+            fifoposix.cpp
+            fileposix.cpp
+            gpu.cpp
+            gpulinux.cpp
+            heapposix.cpp
+            libraryposix.cpp
+            localtimeposix.cpp
+            memorylinux.cpp
+            platformposix.cpp
+            sharedmemoryposix.cpp
+            threadmacos.cpp
             userhomeposix.cpp
     )
 else()

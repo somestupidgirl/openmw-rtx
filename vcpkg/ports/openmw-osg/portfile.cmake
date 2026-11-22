@@ -4,9 +4,6 @@ set(OSG_VER 3.6.5)
 
 set(PATCHES "")
 
-if(VCPKG_TARGET_IS_OSX)
-    list(APPEND PATCHES "macos-dedicated-image-plugin.patch")
-endif()
 
 vcpkg_from_github(
     OUT_SOURCE_PATH SOURCE_PATH
@@ -16,6 +13,12 @@ vcpkg_from_github(
     HEAD_REF 3.6
     PATCHES ${PATCHES}
 )
+
+# macOS (AMDRadeonRDNA4's port; upstream's macos-dedicated-image-plugin.patch is not in this tree): the dedicated image plugins
+# the game links (`USED_OSG_PLUGINS`) take PNG, JPEG and TGA, not ImageIO's, which no program links.
+if(VCPKG_TARGET_IS_OSX)
+    vcpkg_replace_string("${SOURCE_PATH}/src/osgDB/CMakeLists.txt" "ADD_DEFINITIONS(-DDARWIN_IMAGEIO)" "")
+endif()
 
 file(
     REMOVE

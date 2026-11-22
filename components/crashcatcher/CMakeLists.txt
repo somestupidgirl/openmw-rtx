@@ -71,6 +71,14 @@ if(WIN32)
             crashpadclientwin32.cpp
             crashpadmonitorwin32.cpp
     )
+elseif(APPLE)
+    # (macOS, AMDRadeonRDNA4's port: no crash catcher, the files answer so)
+    target_sources(
+        openmw-components
+        PRIVATE
+            crashpadclientmacos.cpp
+            crashpadmonitormacos.cpp
+    )
 else()
     target_sources(
         openmw-components
